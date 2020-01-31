@@ -30,6 +30,8 @@ https://codepen.io/marclundgren/pen/HbymE
 
     <center><h1>An Advant Calendar for Creativity</h1></center><hr />
 
+    <a href="https://github.com/yosun/cal.permute.xyz" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#333333; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
     <div id="mainbody" class="container"> 
       
     </div>
@@ -42,11 +44,38 @@ https://codepen.io/marclundgren/pen/HbymE
       </div> 
     </div>
 
+
+
+    <!--button type="button" class="launch_modal" data-title="testing" data-image="https://via.placeholder.com/300x240.png" data-target="#modal_focus" data-toggle="modal">
+      Launch demo modal
+    </!--button-->
+
 <footer class="text-muted">
   <div class="container">
-    <center>cal.Permute.xyz is an Advent Calendar for Creativity - An AReality3D Permute.xyz project by I Yosun Chang - fork on Github</center>
+    <center>cal.Permute.xyz is an Advent Calendar for Creativity - An AReality3D <a href="http://permute.xyz">Permute.xyz</a> project by I Yosun Chang - fork on <a href="https://github.com/yosun/cal.permute.xyz">Github</a></center>
   </div>
 </footer>
+
+
+<div class="modal fade" id="modal_focus" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="modal-title">Modal Title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="" id="modal-img" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -118,9 +147,14 @@ https://codepen.io/marclundgren/pen/HbymE
       if(row['pic']==undefined ||row['pic'].length<1)var pic = 'https://s3.amazonaws.com/cal.permute.xyz/cal.permute.xyz_default_gray2.png';
       else var pic = row['pic'];
 
+      var desc = row['desc'];
+      if(desc==undefined||desc.length<0||desc==''){
+        var desc = "<a data-title='"+row['what']+"' data-image='"+pic+"' class='launch_modal'><img class='img-fluid' src='"+pic+"' /></a>";
+      } 
+
   return '<div class="col-xs-1 grid-cell">'+
           '<div class="card mb-4 shadow-sm">'+
-            '<a data-toggle="popover" data-content="'+row['what']+'" title="'+row['desc']+'"><img class="bd-placeholder-img card-img-top daycover" focusable="false" role="img" aria-label="Placeholder: Thumbnail" src="'+pic+'" /></a>'+
+            '<a data-toggle="popover" data-content="'+desc+'" title="'+row['what']+'"><img class="card-img-top daycover" focusable="false" role="img" aria-label="Saliant Summary for Today" src="'+pic+'" /></a>'+
             '<div class="card-body">'+
                     '<div class="card-title padme">'+row['what_short']+'</div>'+
               '<div class="d-flex justify-content-between align-items-center padme">'+
@@ -181,11 +215,27 @@ return '<div class="col-xs-1 grid-cell">'+
 
     $('body').popover({
       selector: '[data-toggle="popover"]',
-      placement:'top',
-      trigger: 'hover',
+      placement:'top',  
       html: true,
     });
+ 
+    $('.launch_modal').on( "click", function() {  
+      $('#modal_focus').modal('show');
+    });
 
+    $('#modal_focus').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget); // Button that triggered the modal
+      var title = button.data('title'); // Extract info from data-* attributes
+      var image = button.data('image'); // Extract info from data-* attributes
+      console.log(title);
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this);
+      modal.find('#modal-img').attr('src',image); 
+      modal.find('#modal-title').html(title);
+
+
+    });
   });
 </script>
 
