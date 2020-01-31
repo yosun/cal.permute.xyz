@@ -1,0 +1,196 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>cal.PERMUTE.xyz</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/album/">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script-->
+
+    <style> 
+      /*
+//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css
+https://codepen.io/marclundgren/pen/HbymE
+*/
+
+
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="cal.css" rel="stylesheet">
+  </head>
+  <body> 
+
+    <center><h1>An Advant Calendar for Creativity</h1></center><hr />
+
+    <div id="mainbody" class="container"> 
+      
+    </div>
+
+    <div id="loading"> 
+      <div class="d-flex justify-content-center"> 
+          <div class="spinner-grow" role="status">
+            <span class="sr-only"> Loading... </span>
+          </div> 
+      </div> 
+    </div>
+
+<footer class="text-muted">
+  <div class="container">
+    <center>cal.Permute.xyz - An AReality3D Permute.xyz project by I Yosun Chang</center>
+  </div>
+</footer>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!--script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+<script type='text/javascript'>    
+  var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/14OmxfvNn8JaLv5q-TqmBQ8FnelaIfXtHUi4cRl9kl1A/edit?usp=sharing';
+
+  function init() {
+    Tabletop.init( { key: publicSpreadsheetUrl,
+                     callback: showInfo,
+                     simpleSheet: true } )
+  }
+
+  function showInfo(data, tabletop) { 
+      var data = tabletop.data(); 
+      var datamonth=[];
+      var uniquemonths=[];
+
+      // process into reverse month;
+      $.each( data, function(i, row) {
+ 
+       if(!uniquemonths.includes(month(row['date']))){
+         uniquemonths.push(month(row['date']));
+         
+         datamonth[month(row['date'])] = [row];
+       }else  
+       datamonth[month(row['date'])].push(row);
+
+      });
+
+      //console.log(datamonth[0].length);console.log(datamonth[1].length);
+ 
+      // render
+      for(m=(uniquemonths.length-1);m>=0;m--){
+        month = uniquemonths[m]; console.log(month + " " + datamonth[month].length);
+
+        $('#mainbody').append('<header><div class="container"><center><h1>'+GetReadableMonth(m)+' '+year(datamonth[month][0]['date'])+'</h1></center></div></header><main role="main">  <div class="album py-5 bg-light"><div class="container"> <div class="grid-calendar"> <div class="row calendar-week-header">'+weekheader()+'</div>   <div id="row'+m+'" class="row calendar-week"> ');
+
+        // process days of each month;
+          $.each( datamonth[month], function(i, row) {
+            var day = dow(row['date']);  
+
+            // hack to fix first day
+            if(i == 0){
+              if(day==0){
+
+              }else{
+                  for(var j = day ; j > 0 ; j --)
+                  $('#row'+m).append(emptycell());
+              }
+            }
+            var cell = eachCell(row);  
+            $('#row'+m).append(cell);
+          });  
+
+          $('#mainbody').append('</div>   </div> </div> </div> </main>');
+      }
+      
+
+      // done!
+      $('#loading').hide();
+  }
+
+  function eachCell(row){ 
+      if(row['pic']==undefined ||row['pic'].length<1)var pic = 'https://via.placeholder.com/300x168.png';
+      else var pic = row['pic'];
+
+  return '<div class="col-xs-1 grid-cell">'+
+          '<div class="card mb-4 shadow-sm">'+
+            '<a data-toggle="popover" data-content="'+row['what']+'" title="'+row['desc']+'"><img class="bd-placeholder-img card-img-top daycover" focusable="false" role="img" aria-label="Placeholder: Thumbnail" src="'+pic+'" /></a>'+
+            '<div class="card-body">'+
+                    '<div class="card-title padme">'+row['what_short']+'</div>'+
+              '<div class="d-flex justify-content-between align-items-center padme">'+
+                    '<div class="btn-group">'+
+                  '<button type="button" class="btn btn-sm btn-outline-secondary smallertxt">#'+row['category']+'</button> '+
+                '</div>'+
+                '<div class="cal-date text-muted">'+day(row['date'])+'</div>'+
+              '</div>'+
+            '</div>'+
+          '</div>'+
+        '</div>';
+  }
+  function emptycell(){
+return '<div class="col-xs-1 grid-cell">'+
+          '<div class="card mb-4 shadow-sm bg-dark">'+
+            '<img class="bd-placeholder-img card-img-top daycover" focusable="false" role="img" aria-label="Placeholder: Thumbnail" src="https://via.placeholder.com/300x167.png" />'+
+            '<div class="card-body">'+
+                    '<div class="card-title padme text-muted font-italic"> A Day Last Month </div>'+
+              '<div class="d-flex justify-content-between align-items-center padme">'+
+                    '<div class="btn-group"></div>'+
+                '<div class="cal-date text-muted"> x </div>'+
+              '</div>'+
+            '</div>'+
+          '</div>'+
+        '</div>';
+  }
+
+// date helpers
+  function day(date){
+    return new Date(date).getDate();
+  }
+  function dow(date){
+    return new Date(date).getDay();
+  } 
+  function month(date){
+    return new Date(date).getMonth();
+  }
+  function year(date){
+    return new Date(date).getFullYear();
+  }
+  function GetReadableMonth(n){
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    return months[n];
+  }
+  function weekheader(){return'<div class="col-xs-1 grid-cell h3 text-muted"><div><div><span>Sunday</span></div></div></div>'+
+                            '<div class="col-xs-1 grid-cell h3"><div><div><span>Monday</span></div></div></div>'+
+                            '<div class="col-xs-1 grid-cell h3"><div><div><span>Tuesday</span></div></div></div>'+
+                            '<div class="col-xs-1 grid-cell h3"><div><div><span>Wednesday</span></div></div></div>'+
+                            '<div class="col-xs-1 grid-cell h3"><div><div><span>Thursday</span></div></div></div>'+
+                            '<div class="col-xs-1 grid-cell h3"><div><div><span>Friday</span></div></div></div>'+
+                            '<div class="col-xs-1 grid-cell h3 text-muted"><div><div><span>Saturday</span></div></div></div>';
+  }
+
+
+// tada!
+  $(document).ready(function(){
+    init();  
+
+    $('body').popover({
+      selector: '[data-toggle="popover"]',
+      placement:'top',
+      trigger: 'hover',
+      html: true,
+    });
+
+  });
+</script>
+
+</body>
+
+
+
+
+</html>
