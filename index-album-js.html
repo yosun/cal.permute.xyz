@@ -44,7 +44,7 @@ https://codepen.io/marclundgren/pen/HbymE
 
 <footer class="text-muted">
   <div class="container">
-    <center>cal.Permute.xyz - An AReality3D Permute.xyz project by I Yosun Chang</center>
+    <center>cal.Permute.xyz is an Advent Calendar for Creativity - An AReality3D Permute.xyz project by I Yosun Chang - fork on Github</center>
   </div>
 </footer>
 
@@ -84,9 +84,10 @@ https://codepen.io/marclundgren/pen/HbymE
  
       // render
       for(m=(uniquemonths.length-1);m>=0;m--){
-        month = uniquemonths[m]; console.log(month + " " + datamonth[month].length);
-
-        $('#mainbody').append('<header><div class="container"><center><h1>'+GetReadableMonth(m)+' '+year(datamonth[month][0]['date'])+'</h1></center></div></header><main role="main">  <div class="album py-5 bg-light"><div class="container"> <div class="grid-calendar"> <div class="row calendar-week-header">'+weekheader()+'</div>   <div id="row'+m+'" class="row calendar-week"> ');
+        month = uniquemonths[m]; 
+        yr = year(datamonth[month][0]['date']); 
+        aname = 'ym_' + yr+'_'+month;
+        $('#mainbody').append('<a name="'+aname+'"></a><header><div class="container"><center><h1><a href="#'+aname+'">'+GetReadableMonth(m)+' '+yr+'</a></h1></center></div></header><main role="main">  <div class="album py-5 bg-light"><div class="container"> <div class="grid-calendar"> <div class="row calendar-week-header">'+weekheader()+'</div>   <div id="row'+m+'" class="row calendar-week"> ');
 
         // process days of each month;
           $.each( datamonth[month], function(i, row) {
@@ -114,7 +115,7 @@ https://codepen.io/marclundgren/pen/HbymE
   }
 
   function eachCell(row){ 
-      if(row['pic']==undefined ||row['pic'].length<1)var pic = 'https://via.placeholder.com/300x168.png';
+      if(row['pic']==undefined ||row['pic'].length<1)var pic = 'https://s3.amazonaws.com/cal.permute.xyz/cal.permute.xyz_default_gray2.png';
       else var pic = row['pic'];
 
   return '<div class="col-xs-1 grid-cell">'+
@@ -135,7 +136,7 @@ https://codepen.io/marclundgren/pen/HbymE
   function emptycell(){
 return '<div class="col-xs-1 grid-cell">'+
           '<div class="card mb-4 shadow-sm bg-dark">'+
-            '<img class="bd-placeholder-img card-img-top daycover" focusable="false" role="img" aria-label="Placeholder: Thumbnail" src="https://via.placeholder.com/300x167.png" />'+
+            '<img class="bd-placeholder-img card-img-top daycover" focusable="false" role="img" aria-label="Placeholder: Thumbnail" src="https://s3.amazonaws.com/cal.permute.xyz/cal.permute.xyz_default_gray2.png" />'+
             '<div class="card-body">'+
                     '<div class="card-title padme text-muted font-italic"> A Day Last Month </div>'+
               '<div class="d-flex justify-content-between align-items-center padme">'+
